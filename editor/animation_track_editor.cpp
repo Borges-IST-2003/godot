@@ -6711,6 +6711,11 @@ void AnimationTrackEditor::_edit_menu_pressed(int p_option) {
 		case EDIT_BAKE_ANIMATION: {
 			bake_dialog->popup_centered(Size2(200, 100) * EDSCALE);
 		} break;
+
+		case EDIT_PROPERTY_TO_BEZIER: {		//changed by andre
+			bake_dialog->popup_centered(Size2(200, 100) * EDSCALE);
+		} break;
+
 		case EDIT_BAKE_ANIMATION_CONFIRM: {
 			EditorUndoRedoManager *undo_redo = EditorUndoRedoManager::get_singleton();
 			undo_redo->create_action(TTR("Bake Animation as Linear Keys"));
@@ -7378,7 +7383,7 @@ AnimationTrackEditor::AnimationTrackEditor() {
 	edit->get_popup()->add_shortcut(ED_SHORTCUT("animation_editor/apply_reset", TTR("Apply Reset")), EDIT_APPLY_RESET);
 	edit->get_popup()->add_separator();
 	edit->get_popup()->add_item(TTR("Bake Animation..."), EDIT_BAKE_ANIMATION);
-	edit->get_popup()->add_item(TTR("Change Property to Bezier"), EDIT_BAKE_ANIMATION);
+	edit->get_popup()->add_item(TTR("Change Property to Bezier"), EDIT_PROPERTY_TO_BEZIER);		//changed by andre
 	edit->get_popup()->add_item(TTR("Optimize Animation (no undo)..."), EDIT_OPTIMIZE_ANIMATION);
 	edit->get_popup()->add_item(TTR("Clean-Up Animation (no undo)..."), EDIT_CLEAN_UP_ANIMATION);
 
