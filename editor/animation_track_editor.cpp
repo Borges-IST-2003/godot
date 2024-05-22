@@ -6712,10 +6712,6 @@ void AnimationTrackEditor::_edit_menu_pressed(int p_option) {
 			bake_dialog->popup_centered(Size2(200, 100) * EDSCALE);
 		} break;
 
-		case EDIT_PROPERTY_TO_BEZIER: {		//changed by andre
-			bake_dialog->popup_centered(Size2(200, 100) * EDSCALE);
-		} break;
-
 		case EDIT_BAKE_ANIMATION_CONFIRM: {
 			EditorUndoRedoManager *undo_redo = EditorUndoRedoManager::get_singleton();
 			undo_redo->create_action(TTR("Bake Animation as Linear Keys"));
@@ -7383,7 +7379,6 @@ AnimationTrackEditor::AnimationTrackEditor() {
 	edit->get_popup()->add_shortcut(ED_SHORTCUT("animation_editor/apply_reset", TTR("Apply Reset")), EDIT_APPLY_RESET);
 	edit->get_popup()->add_separator();
 	edit->get_popup()->add_item(TTR("Bake Animation..."), EDIT_BAKE_ANIMATION);
-	edit->get_popup()->add_item(TTR("Change Property to Bezier"), EDIT_PROPERTY_TO_BEZIER);		//changed by andre
 	edit->get_popup()->add_item(TTR("Optimize Animation (no undo)..."), EDIT_OPTIMIZE_ANIMATION);
 	edit->get_popup()->add_item(TTR("Clean-Up Animation (no undo)..."), EDIT_CLEAN_UP_ANIMATION);
 
@@ -7606,6 +7601,29 @@ AnimationTrackEditor::AnimationTrackEditor() {
 	track_copy_select->set_hide_root(true);
 	track_copy_vbox->add_child(track_copy_select);
 	track_copy_dialog->connect("confirmed", callable_mp(this, &AnimationTrackEditor::_edit_menu_pressed).bind(EDIT_COPY_TRACKS_CONFIRM));
+
+	// changed by andre
+	property_to_bezier_dialog = memnew(ConfirmationDialog);
+	add_child(property_to_bezier_dialog);
+	property_to_bezier_dialog->set_title(TTR("Select Tracks to change"));
+	property_to_bezier_dialog->set_ok_button_text(TTR("Change"));
+
+	VBoxContainer *property_to_bezier_box = memnew(VBoxContainer);
+	property_to_bezier_dialog->add_child(property_to_bezier_box);
+
+	Button *select_all_button_bezier = memnew(Button);
+	select_all_button_bezier->set_text(TTR("Select All/None"));
+	select_all_button_bezier->connect(SceneStringName(pressed), callable_mp(this, &AnimationTrackEditor::_select_all_property_to_bezier));
+	property_to_bezier_box->add_child(select_all_button_bezier);
+
+	property_to_bezier_select = memnew(Tree);
+	property_to_bezier_select->set_auto_translate_mode(AUTO_TRANSLATE_MODE_DISABLED);
+	property_to_bezier_select->set_h_size_flags(SIZE_EXPAND_FILL);
+	property_to_bezier_select->set_v_size_flags(SIZE_EXPAND_FILL);
+	property_to_bezier_select->set_hide_root(true);
+	property_to_bezier_box->add_child(property_to_bezier_select);
+	property_to_bezier_dialog->connect("confirmed", callable_mp(this, &AnimationTrackEditor::_edit_menu_pressed).bind(EDIT_PROPERTY_TO_BEZIER_CONFIRM));
+
 }
 
 AnimationTrackEditor::~AnimationTrackEditor() {
