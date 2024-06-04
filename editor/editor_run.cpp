@@ -228,6 +228,12 @@ Error EditorRun::run(const String &p_scene, const String &p_write_movie) {
 	VariantWriter::write_to_string(ED_GET_SHORTCUT("editor/stop_running_project"), shortcut);
 	OS::get_singleton()->set_environment("__GODOT_EDITOR_STOP_SHORTCUT__", shortcut);
 
+	VariantWriter::write_to_string(ED_GET_SHORTCUT("editor/run_project"), shortcut);
+	OS::get_singleton()->set_environment("__GODOT_EDITOR_RUN_SHORTCUT__", shortcut);
+
+	VariantWriter::write_to_string(ED_GET_SHORTCUT("editor/run_current_scene"), shortcut);
+	OS::get_singleton()->set_environment("__GODOT_EDITOR_RUN_CURRENT_SHORTCUT__", shortcut);
+
 	String exec = OS::get_singleton()->get_executable_path();
 	int instance_count = RunInstancesDialog::get_singleton()->get_instance_count();
 	for (int i = 0; i < instance_count; i++) {
