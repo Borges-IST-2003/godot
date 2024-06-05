@@ -798,11 +798,15 @@ void ScriptEditorDebugger::_parse_message(const String &p_msg, uint64_t p_thread
 	} else if (p_msg == "request_quit") {
 		emit_signal(SNAME("stop_requested"));
 		_stop_and_notify();
-	} else if (p_msg == "request_run_default") {
+	} else if (p_msg == "request_run_main") {
 		emit_signal(SNAME("stop_requested"));
+		_stop_and_notify();
+		emit_signal(SNAME("run_project_requested"));
 		_stop_and_notify();
 	} else if (p_msg == "request_run_current") {
 		emit_signal(SNAME("stop_requested"));
+		_stop_and_notify();
+		emit_signal(SNAME("run_current_requested"));
 		_stop_and_notify();
 	} else if (p_msg == "performance:profile_names") {
 		Vector<StringName> monitors;

@@ -99,6 +99,8 @@ ScriptEditorDebugger *EditorDebuggerNode::_add_debugger() {
 
 	int id = tabs->get_tab_count();
 	node->connect("stop_requested", callable_mp(this, &EditorDebuggerNode::_debugger_wants_stop).bind(id));
+	//node->connect("run_project_requested", callable_mp(this, &EditorDebuggerNode::_debugger_wants_stop).bind(id)); changed by andre
+	//node->connect("run_current_requested", callable_mp(this, &EditorDebuggerNode::_debugger_wants_stop).bind(id)); changed by andre
 	node->connect("stopped", callable_mp(this, &EditorDebuggerNode::_debugger_stopped).bind(id));
 	node->connect("stack_frame_selected", callable_mp(this, &EditorDebuggerNode::_stack_frame_selected).bind(id));
 	node->connect("error_selected", callable_mp(this, &EditorDebuggerNode::_error_selected).bind(id));

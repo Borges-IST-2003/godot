@@ -984,7 +984,7 @@ void DebugAdapterProtocol::on_debug_data(const String &p_msg, const Array &p_dat
 	// Ignore data that is already handled by DAP
 	if (p_msg == "debug_enter" || p_msg == "debug_exit" || p_msg == "stack_dump" || 
 	p_msg == "stack_frame_vars" || p_msg == "stack_frame_var" || p_msg == "output" || 
-	p_msg == "request_quit" || p_msg == "request_run_default" || p_msg == "request_run_current") {
+	p_msg == "request_quit" || p_msg == "request_run_main" || p_msg == "request_run_current") {
 		return;
 	}
 

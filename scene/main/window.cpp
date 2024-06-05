@@ -1669,8 +1669,8 @@ void Window::_window_input(const Ref<InputEvent> &p_ev) {
 
 		// Closes current scene and runs main scene (F5 by default)
 		// The custom shortcut is provided via environment variable when running from the editor.
-		/*if (debugger_run_default_scene_shortcut.is_null()) {
-			String shortcut_str = OS::get_singleton()->get_environment("__GODOT_EDITOR_STOP_SHORTCUT__");
+		if (debugger_run_default_scene_shortcut.is_null()) {
+			String shortcut_str = OS::get_singleton()->get_environment("__GODOT_EDITOR_RUN_SHORTCUT__");
 			if (!shortcut_str.is_empty()) {
 				Variant shortcut_var;
 
@@ -1691,8 +1691,35 @@ void Window::_window_input(const Ref<InputEvent> &p_ev) {
 		}
 
 		if (k.is_valid() && k->is_pressed() && !k->is_echo() && debugger_run_default_scene_shortcut->matches_event(k)) {
-			EngineDebugger::get_singleton()->send_message("request_quit", Array());
-		}*/
+			EngineDebugger::get_singleton()->send_message("request_run_main", Array());
+		}
+
+		// Closes current scene and runs current opened scene (F6 by default)
+		// The custom shortcut is provided via environment variable when running from the editor.
+		if (debugger_run_current_scene_shortcut.is_null()) {
+			String shortcut_str = OS::get_singleton()->get_environment("__GODOT_EDITOR_RUN_CURRENT_SHORTCUT__");
+			if (!shortcut_str.is_empty()) {
+				Variant shortcut_var;
+
+				VariantParser::StreamString ss;
+				ss.s = shortcut_str;
+
+				String errs;
+				int line;
+				VariantParser::parse(&ss, shortcut_var, errs, line);
+				debugger_run_current_scene_shortcut = shortcut_var;
+			}
+
+			if (debugger_run_current_scene_shortcut.is_null()) {
+				// Define a default shortcut if it wasn't provided or is invalid.
+				debugger_run_current_scene_shortcut.instantiate();
+				debugger_run_current_scene_shortcut->set_events({ (Variant)InputEventKey::create_reference(Key::F6) });
+			}
+		}
+
+		if (k.is_valid() && k->is_pressed() && !k->is_echo() && debugger_run_current_scene_shortcut->matches_event(k)) {
+			EngineDebugger::get_singleton()->send_message("request_run_current", Array());
+		}
 	}
 
 	if (exclusive_child != nullptr) {
