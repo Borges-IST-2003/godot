@@ -1668,7 +1668,7 @@ void Window::_window_input(const Ref<InputEvent> &p_ev) {
 		}
 
 		// Closes current scene and runs main scene (F5 by default)
-		// The custom shortcut is provided via environment variable when running from the editor.
+		// The custom shortcut is provided via environment variable when running from the editor. changed by andre
 		if (debugger_run_default_scene_shortcut.is_null()) {
 			String shortcut_str = OS::get_singleton()->get_environment("__GODOT_EDITOR_RUN_SHORTCUT__");
 			if (!shortcut_str.is_empty()) {

@@ -131,6 +131,8 @@ private:
 protected:
 	void _debugger_stopped(int p_id);
 	void _debugger_wants_stop(int p_id);
+	void _debugger_run_current_scene();
+	void _debugger_run_main_scene();
 	void _debugger_changed(int p_tab);
 	void _remote_tree_updated(int p_debugger);
 	void _remote_tree_button_pressed(Object *p_item, int p_column, int p_id, MouseButton p_button);
