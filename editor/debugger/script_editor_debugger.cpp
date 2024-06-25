@@ -798,6 +798,8 @@ void ScriptEditorDebugger::_parse_message(const String &p_msg, uint64_t p_thread
 	} else if (p_msg == "request_quit") {
 		emit_signal(SNAME("stop_requested"));
 		_stop_and_notify();
+	} else if (p_msg == "request_run_default") {		//changed by andre
+		emit_signal(SNAME("run_default_requested"));
 	} else if (p_msg == "performance:profile_names") {
 		Vector<StringName> monitors;
 		monitors.resize(p_data.size());
@@ -1748,6 +1750,8 @@ void ScriptEditorDebugger::_bind_methods() {
 	ADD_SIGNAL(MethodInfo("started"));
 	ADD_SIGNAL(MethodInfo("stopped"));
 	ADD_SIGNAL(MethodInfo("stop_requested"));
+	ADD_SIGNAL(MethodInfo("run_default_requested"));
+	ADD_SIGNAL(MethodInfo("run_current_requested"));
 	ADD_SIGNAL(MethodInfo("stack_frame_selected", PropertyInfo(Variant::INT, "frame")));
 	ADD_SIGNAL(MethodInfo("error_selected", PropertyInfo(Variant::INT, "error")));
 	ADD_SIGNAL(MethodInfo("breakpoint_selected", PropertyInfo("script"), PropertyInfo(Variant::INT, "line")));

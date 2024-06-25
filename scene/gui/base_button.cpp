@@ -471,6 +471,7 @@ void BaseButton::_bind_methods() {
 	GDVIRTUAL_BIND(_toggled, "toggled_on");
 
 	ADD_SIGNAL(MethodInfo("pressed"));
+	ADD_SIGNAL(MethodInfo("run_default_requested"));
 	ADD_SIGNAL(MethodInfo("button_up"));
 	ADD_SIGNAL(MethodInfo("button_down"));
 	ADD_SIGNAL(MethodInfo("toggled", PropertyInfo(Variant::BOOL, "toggled_on")));

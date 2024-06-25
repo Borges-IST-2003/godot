@@ -1603,13 +1603,36 @@ void Window::_window_input(const Ref<InputEvent> &p_ev) {
 				debugger_stop_shortcut->set_events({ (Variant)InputEventKey::create_reference(Key::F8) });
 			}
 		}
+		if (debugger_run_default_shortcut.is_null()) {		//changed by andre
+			String shortcut_str = OS::get_singleton()->get_environment("__GODOT_EDITOR_RUN_DEFAULT_SHORTCUT__");
+			if (!shortcut_str.is_empty()) {
+				Variant shortcut_var;
+
+				VariantParser::StreamString ss;
+				ss.s = shortcut_str;
+
+				String errs;
+				int line;
+				VariantParser::parse(&ss, shortcut_var, errs, line);
+				debugger_run_default_shortcut = shortcut_var;
+			}
+
+			if (debugger_run_default_shortcut.is_null()) {
+				// Define a default shortcut if it wasn't provided or is invalid.
+				debugger_run_default_shortcut.instantiate();
+				debugger_run_default_shortcut->set_events({ (Variant)InputEventKey::create_reference(Key::F5) });
+			}
+		}
 
 		Ref<InputEventKey> k = p_ev;
 		if (k.is_valid() && k->is_pressed() && !k->is_echo() && debugger_stop_shortcut->matches_event(k)) {
 			EngineDebugger::get_singleton()->send_message("request_quit", Array());
+		}	//changed by andre
+		else if (k.is_valid() && k->is_pressed() && !k->is_echo() && debugger_run_default_shortcut->matches_event(k)) {
+			EngineDebugger::get_singleton()->send_message("request_run_default", Array());
 		}
 	}
-
+	
 	if (exclusive_child != nullptr) {
 		if (!is_embedding_subwindows()) { // Not embedding, no need for event.
 			return;
