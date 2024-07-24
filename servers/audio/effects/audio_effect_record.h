@@ -91,6 +91,7 @@ public:
 	Ref<AudioEffectInstance> instantiate() override;
 	void set_recording_active(bool p_record);
 	bool is_recording_active() const;
+	bool is_recording_callable() const;
 	void set_format(AudioStreamWAV::Format p_format);
 	AudioStreamWAV::Format get_format() const;
 	Ref<AudioStreamWAV> get_recording() const;

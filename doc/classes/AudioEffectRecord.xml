@@ -26,6 +26,12 @@
 				Returns whether the recording is active or not.
 			</description>
 		</method>
+		<method name="is_recording_callable" qualifiers="const">
+			<return type="bool" />
+			<description>
+				Returns whether the recording is callable or not.
+			</description>
+		</method>
 		<method name="set_recording_active">
 			<return type="void" />
 			<param index="0" name="record" type="bool" />

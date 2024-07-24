@@ -189,6 +189,10 @@ bool AudioEffectRecord::is_recording_active() const {
 	}
 }
 
+bool AudioEffectRecord::is_recording_callable() const {
+	return !current_instance.is_null() && !current_instance->recording_data.is_empty();
+}
+
 void AudioEffectRecord::set_format(AudioStreamWAV::Format p_format) {
 	format = p_format;
 }
@@ -279,6 +283,7 @@ Ref<AudioStreamWAV> AudioEffectRecord::get_recording() const {
 void AudioEffectRecord::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("set_recording_active", "record"), &AudioEffectRecord::set_recording_active);
 	ClassDB::bind_method(D_METHOD("is_recording_active"), &AudioEffectRecord::is_recording_active);
+	ClassDB::bind_method(D_METHOD("is_recording_callable"), &AudioEffectRecord::is_recording_callable);
 	ClassDB::bind_method(D_METHOD("set_format", "format"), &AudioEffectRecord::set_format);
 	ClassDB::bind_method(D_METHOD("get_format"), &AudioEffectRecord::get_format);
 	ClassDB::bind_method(D_METHOD("get_recording"), &AudioEffectRecord::get_recording);
