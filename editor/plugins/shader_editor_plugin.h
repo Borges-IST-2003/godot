@@ -71,7 +71,8 @@ class ShaderEditorPlugin : public EditorPlugin {
 		FILE_SAVE_AS,
 		FILE_INSPECT,
 		FILE_CLOSE,
-		FILE_MAX
+		FILE_MAX,
+		TOGGLE_SHADERS_PANEL
 	};
 
 	HSplitContainer *main_split = nullptr;
@@ -80,6 +81,7 @@ class ShaderEditorPlugin : public EditorPlugin {
 
 	Button *button = nullptr;
 	MenuButton *file_menu = nullptr;
+	Button *toggle_shaders_button;
 
 	WindowWrapper *window_wrapper = nullptr;
 	Button *make_floating = nullptr;
@@ -91,6 +93,7 @@ class ShaderEditorPlugin : public EditorPlugin {
 	void _update_shader_list();
 	void _shader_selected(int p_index);
 	void _shader_list_clicked(int p_item, Vector2 p_local_mouse_pos, MouseButton p_mouse_button_index);
+	void _toggle_shaders_pressed();
 	void _menu_item_pressed(int p_index);
 	void _resource_saved(Object *obj);
 	void _close_shader(int p_index);
@@ -115,6 +118,8 @@ protected:
 	void _notification(int p_what);
 
 public:
+	bool toggle_shaders_panel();
+	void update_toggle_shaders_button();
 	virtual String get_name() const override { return "Shader"; }
 	virtual void edit(Object *p_object) override;
 	virtual bool handles(Object *p_object) const override;

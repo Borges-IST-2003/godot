@@ -419,6 +419,16 @@ void ShaderEditorPlugin::_resource_saved(Object *obj) {
 	}
 }
 
+void ShaderEditorPlugin::_toggle_shaders_pressed() {
+	toggle_shaders_panel();
+	update_toggle_shaders_button();
+}
+
+void ShaderEditorPlugin::update_toggle_shaders_button() {
+	toggle_shaders_button->set_icon(toggle_shaders_button->get_editor_theme_icon(shader_list->is_visible() ? SNAME("Back") : SNAME("Forward")));
+	toggle_shaders_button->set_tooltip_text(vformat("%s (%s)", TTR("Toggle Shaders Panel"), ED_GET_SHORTCUT("shader_editor_plugin/toggle_shaders_panel")->get_as_text()));
+}
+
 void ShaderEditorPlugin::_menu_item_pressed(int p_index) {
 	switch (p_index) {
 		case FILE_NEW: {
@@ -502,6 +512,10 @@ void ShaderEditorPlugin::_menu_item_pressed(int p_index) {
 		case FILE_CLOSE: {
 			_close_shader(shader_tabs->get_current_tab());
 		} break;
+		case TOGGLE_SHADERS_PANEL: {
+			toggle_shaders_panel();
+			update_toggle_shaders_button();
+		}
 	}
 }
 
@@ -511,6 +525,12 @@ void ShaderEditorPlugin::_shader_created(Ref<Shader> p_shader) {
 
 void ShaderEditorPlugin::_shader_include_created(Ref<ShaderInclude> p_shader_inc) {
 	EditorNode::get_singleton()->push_item(p_shader_inc.ptr());
+}
+
+bool ShaderEditorPlugin::toggle_shaders_panel(){
+	shader_list->set_visible(!shader_list->is_visible());
+	EditorSettings::get_singleton()->set_project_metadata("shader_panel", "show_shaders_panel", shader_list->is_visible());
+	return shader_list->is_visible();
 }
 
 Variant ShaderEditorPlugin::get_drag_data_fw(const Point2 &p_point, Control *p_from) {
@@ -673,6 +693,7 @@ void ShaderEditorPlugin::_notification(int p_what) {
 			EditorNode::get_singleton()->connect("scene_closed", callable_mp(this, &ShaderEditorPlugin::_close_builtin_shaders_from_scene));
 			FileSystemDock::get_singleton()->connect("file_removed", callable_mp(this, &ShaderEditorPlugin::_file_removed));
 			EditorNode::get_singleton()->connect("resource_saved", callable_mp(this, &ShaderEditorPlugin::_res_saved_callback));
+			update_toggle_shaders_button();
 		} break;
 	}
 }
@@ -696,16 +717,26 @@ ShaderEditorPlugin::ShaderEditorPlugin() {
 	file_menu->get_popup()->add_item(TTR("New Shader..."), FILE_NEW);
 	file_menu->get_popup()->add_item(TTR("New Shader Include..."), FILE_NEW_INCLUDE);
 	file_menu->get_popup()->add_separator();
+
 	file_menu->get_popup()->add_item(TTR("Load Shader File..."), FILE_OPEN);
 	file_menu->get_popup()->add_item(TTR("Load Shader Include File..."), FILE_OPEN_INCLUDE);
 	file_menu->get_popup()->add_shortcut(ED_SHORTCUT("shader_editor/save", TTR("Save File"), KeyModifierMask::ALT | KeyModifierMask::CMD_OR_CTRL | Key::S), FILE_SAVE);
 	file_menu->get_popup()->add_shortcut(ED_SHORTCUT("shader_editor/save_as", TTR("Save File As...")), FILE_SAVE_AS);
 	file_menu->get_popup()->add_separator();
+	file_menu->get_popup()->add_shortcut(ED_SHORTCUT("shader_editor_plugin/toggle_shaders_panel", TTR("Toggle Shaders Panel"), KeyModifierMask::CMD_OR_CTRL | Key::H), TOGGLE_SHADERS_PANEL);
+	file_menu->get_popup()->add_separator();
 	file_menu->get_popup()->add_item(TTR("Open File in Inspector"), FILE_INSPECT);
 	file_menu->get_popup()->add_separator();
+
 	file_menu->get_popup()->add_item(TTR("Close File"), FILE_CLOSE);
 	file_menu->get_popup()->connect(SceneStringName(id_pressed), callable_mp(this, &ShaderEditorPlugin::_menu_item_pressed));
 	menu_hb->add_child(file_menu);
+
+	toggle_shaders_button = memnew(Button);
+	toggle_shaders_button->set_flat(true);
+	toggle_shaders_button->set_v_size_flags(Control::SIZE_EXPAND | Control::SIZE_SHRINK_CENTER);
+	toggle_shaders_button->connect("pressed", callable_mp(this, &ShaderEditorPlugin::_toggle_shaders_pressed));
+	menu_hb->add_child(toggle_shaders_button);
 
 	for (int i = FILE_SAVE; i < FILE_MAX; i++) {
 		file_menu->get_popup()->set_item_disabled(file_menu->get_popup()->get_item_index(i), true);
